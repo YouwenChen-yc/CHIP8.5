@@ -44,18 +44,17 @@ class MoviesController < ApplicationController
   end
 
   def search_tmdb
-    search_term = params[:search_terms] || params[:title]
-
-    if search_term.blank?
-      flash[:alert] = 'Please fill in all required fields!'
-      redirect_to movies_path and return
-    end
-
-    @movies = Movie.find_in_tmdb(search_term)
-
-    if @movies.empty?
-      flash[:notice] = 'No movies found with given parameters!'
-      redirect_to movies_path and return
+    # Only process validation/search if the form was actually submitted
+    if request.post?
+      if params[:title].blank?
+        flash[:warning] = "Please fill in all required fields!"
+        redirect_to search_tmdb_path and return
+      else
+        @movies = Movie.find_in_tmdb(params[:title], params[:release_year], params[:language])
+        if @movies.blank?
+          flash[:notice] = "No matching movies found"
+        end
+      end
     end
   end
 
