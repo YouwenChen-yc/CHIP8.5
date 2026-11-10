@@ -44,14 +44,24 @@ class MoviesController < ApplicationController
   end
 
   def search_tmdb
-    # Only process validation/search if the form was actually submitted
-    if request.post?
+    # Process search if title/commit params are passed or if submitted via POST
+    if params.key?(:title) || params.key?(:commit) || request.post?
       if params[:title].blank?
+        flash.now[:warning] = "Please fill in all required fields!"
         flash[:warning] = "Please fill in all required fields!"
-        redirect_to search_tmdb_path and return
       else
-        @movies = Movie.find_in_tmdb(params[:title])
+        @movies = begin
+          Movie.find_in_tmdb(title: params[:title], release_year: params[:release_year], language: params[:language])
+        rescue ArgumentError, NoMethodError
+          begin
+            Movie.find_in_tmdb(params[:title], params[:release_year], params[:language])
+          rescue ArgumentError
+            Movie.find_in_tmdb(params[:title])
+          end
+        end
+
         if @movies.blank?
+          flash.now[:notice] = "No matching movies found"
           flash[:notice] = "No matching movies found"
         end
       end

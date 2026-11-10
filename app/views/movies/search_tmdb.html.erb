@@ -1,24 +1,24 @@
 <h2>Search in TMDb</h2>
 
 <div class="search-container mb-4">
-  <%= form_tag search_tmdb_path, method: :post, id: 'tmdb_form' do %>
+  <%= form_tag search_tmdb_path, method: :get, id: 'tmdb_form' do %>
     <div class="form-group">
       <label for="movie_title_field">Movie Name</label>
-      <%= text_field_tag 'title', nil, class: "form-control", id: "movie_title_field", placeholder: "Manhunter" %> 
+      <%= text_field_tag 'title', params[:title], class: "form-control", id: "movie_title_field", placeholder: "Manhunter" %> 
     </div>
 
     <div class="form-group">
       <label for="movie_year_field">Release Year</label>
-      <%= text_field_tag 'release_year', nil, class: "form-control", id: "movie_year_field", placeholder: "1986" %>
+      <%= text_field_tag 'release_year', params[:release_year], class: "form-control", id: "movie_year_field", placeholder: "1986" %>
     </div>
     
     <div class="form-check mt-2">
-      <%= radio_button_tag 'language', 'en', false, class: "form-check-input", id: "language_en" %>
+      <%= radio_button_tag 'language', 'en', (params[:language] == 'en'), class: "form-check-input", id: "language_en" %>
       <label class="form-check-label" for="language_en">English Only</label>
     </div>
 
     <div class="form-check mb-3">
-      <%= radio_button_tag 'language', 'all', true, class: "form-check-input", id: "language_all" %>
+      <%= radio_button_tag 'language', 'all', (params[:language].nil? || params[:language] == 'all' || params[:language] != 'en'), class: "form-check-input", id: "language_all" %>
       <label class="form-check-label" for="language_all">All Languages</label>
     </div>
     
