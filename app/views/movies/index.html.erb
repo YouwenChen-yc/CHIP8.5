@@ -18,6 +18,7 @@
   </div>
   <div class="col-md-2">
     <%# Part 1 here %>
+    <%= link_to 'Search TMDb', search_tmdb_path, class: 'btn btn-primary' %>
   </div>
 
 </div>
@@ -27,7 +28,7 @@
     <tr>
       <th>
         <%= link_to 'Movie Title', movies_path({sort_by: 'title', ratings: @ratings_to_show_hash}),
-                      id: 'title_header', class: ('bg-warning hilite' if @sort_by == 'title') %>
+                    id: 'title_header', class: ('bg-warning hilite' if @sort_by == 'title') %>
       </th>
       <th>Rating</th>
       <th>
